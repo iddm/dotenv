@@ -19,14 +19,16 @@
    default))
 
 (defun parse-env-string (string)
-  "Reads environment string (KEY=VALUE)"
-  (str:split "=" string))
+  "Reads environment string (KEY=VALUE). Returns the pair on success, NIL otherwise."
+  (let ((pair (str:split "=" string :omit-nulls t)))
+    (if (= (list-length pair) 2) pair nil)))
 
 (defun dot-env-read-vars (vars)
   "Reads provided environment variables into *dot-env-data*."
   (dolist (var vars)
     (let ((var (parse-env-string var)))
-      (setf (gethash (car var) *dot-env-data*) (cdr var)))))
+      (if (not var) (return-from dot-env-read-vars) (setf (gethash (car var) *dot-env-data*) (cdr var)))))
+  T)
 
 (defun dot-env-load! (&optional names)
   "Reads provided .env files."
