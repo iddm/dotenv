@@ -23,19 +23,19 @@
   (let ((pair (str:split "=" string :omit-nulls t)))
     (if (= (list-length pair) 2) pair nil)))
 
-(defun dot-env-read-vars (vars)
+(defun read-vars (vars)
   "Reads provided environment variables into *dot-env-data*."
   (dolist (var vars)
     (let ((var (parse-env-string var)))
-      (if (not var) (return-from dot-env-read-vars) (setf (gethash (car var) *dot-env-data*) (cdr var)))))
+      (if (not var) (return-from read-vars) (setf (gethash (car var) *dot-env-data*) (cdr var)))))
   T)
 
-(defun dot-env-load! (&optional names)
+(defun load! (&optional names)
   "Reads provided .env files."
   (dolist (name (or names '(".env")))
-    (dot-env-read-vars (uiop:read-file-lines name))))
+    (read-vars (uiop:read-file-lines name))))
 
-(defun dot-env (name &optional default)
+(defun value (name &optional default)
   "Reads the .env or env variable with such name.
   Returns passed default value or nil if not found"
   (or (car (gethash name *dot-env-data*)) (get-env name default)))

@@ -2,7 +2,7 @@
 
 (defpackage #:dotenv
   (:use #:cl)
-  (:export #:dot-env-load!)
-  (:export #:dot-env-read-vars)
-  (:export #:dot-env)
+  (:export #:load!)
+  (:export #:read-vars)
+  (:export #:value)
   (:shadowing-import-from #:str))
